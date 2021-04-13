@@ -7,7 +7,7 @@ class BookUnit extends Component{
     static propTypes = {
         book: PropTypes.object,
         onChangeBookShelf: PropTypes.func.isRequired
-      }
+      }  
     render() {
         const { book,onChangeBookShelf} = this.props
         return (
@@ -25,7 +25,7 @@ class BookUnit extends Component{
                             </div>
                         )}
                         <div className="book-shelf-changer">
-                            <select value={book.shelf} onChange={(e) => onChangeBookShelf(e,book)}>
+                            <select value={book.shelf === undefined?'none':book.shelf} onChange={(e) => onChangeBookShelf(e,book)}>
                                 <option  value="move" disabled>Move to...</option>
                                 <option  value="currentlyReading">Currently Reading</option>
                                 <option  value="wantToRead">Want to Read</option>
