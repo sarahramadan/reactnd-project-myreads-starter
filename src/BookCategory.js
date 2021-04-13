@@ -1,32 +1,21 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import BookUnit from './BookUnit'
-import * as BooksAPI from './BooksAPI'
+import PropTypes from 'prop-types'
 
 class BookCategory extends Component {
-    state = {
-        books: []
+    static propTypes = {
+        currentBooks: PropTypes.array,
+        readBooks: PropTypes.array,
+        wantToReadBooks: PropTypes.array,
+        onChangeBookShelfCategory: PropTypes.func.isRequired
     }
-    componentDidMount() {
-        this.getAll();
-    }
-    getAll = ()=>{
-        BooksAPI.getAll()
-        .then((res) => {
-            this.setState(() => ({
-                books: res
-            }))
-        })
-    }
+    // emit event to parent controll to change book shelf
     changeBookShelf = (e,book) =>{
-        BooksAPI.update(book,e.target.value).then(res=>{
-            this.getAll();
-        })
+        this.props.onChangeBookShelfCategory(e,book);
     }
     render() {
-        let currentBooks = this.state.books.filter(a => a.shelf === 'currentlyReading');
-        let wantToReadBooks = this.state.books.filter(a => a.shelf === 'wantToRead');
-        let read = this.state.books.filter(a => a.shelf === 'read');
+        const {currentBooks,readBooks,wantToReadBooks} =this.props;
         return (
             <div className="list-books">
                 <div className="list-books-title">
@@ -46,6 +35,7 @@ class BookCategory extends Component {
                                     {currentBooks.map((book, index) => (
                                         <BookUnit key={index} 
                                         book={book}
+                                        shelf={book.shelf}
                                         onChangeBookShelf={this.changeBookShelf} />
                                     ))}
                                 </ol>
@@ -63,6 +53,7 @@ class BookCategory extends Component {
                                     {wantToReadBooks.map((book, index) => (
                                         <BookUnit key={index} 
                                         book={book}
+                                        shelf={book.shelf}
                                         onChangeBookShelf={this.changeBookShelf}
                                          />
                                     ))}
@@ -72,15 +63,16 @@ class BookCategory extends Component {
                         <div className="bookshelf">
                             <h2 className="bookshelf-title">Read</h2>
                             <div className="bookshelf-books">
-                                {read.length === 0 && (
+                                {readBooks.length === 0 && (
                                     <div className='showing-contacts'>
                                         <span>No books in this section</span>
                                     </div>
                                 )}
                                 <ol className="books-grid">
-                                    {read.map((book, index) => (
+                                    {readBooks.map((book, index) => (
                                          <BookUnit key={index} 
                                          book={book}
+                                         shelf={book.shelf}
                                          onChangeBookShelf={this.changeBookShelf}
                                           />
                                     ))}

@@ -2,11 +2,16 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import BookUnit from './BookUnit'
+import PropTypes from 'prop-types'
 
 class SearchBooks extends Component {
+    static propTypes = {
+        books: PropTypes.array,
+        onChangeBookShelfCategory: PropTypes.func.isRequired
+    }
     state = {
         query: '',
-        books: []
+        results: []
     }
     filterQuery = (query) => {
         console.log('filterQuery', query)
@@ -18,36 +23,43 @@ class SearchBooks extends Component {
         }));
         this.serachRequest();
     }
+    //send search request
     serachRequest() {
         BooksAPI.search(this.state.query).then(res => {
             if (res && !res.error) {
                 console.log('search', res);
                 this.setState(() => ({
-                    books: res
+                    results: res
                 }))
             } else {
                 this.setState(() => ({
-                    books: []
+                    results: []
                 })); 
             }
 
         })
             .catch((error) => {
                 this.setState(() => ({
-                    books: []
+                    results: []
                 })); 
                 console.error('Error:', error);
             }
             )
     }
+    // change book shelf 
     changeBookShelf = (e, book) => {
-        BooksAPI.update(book, e.target.value).then(res => {
-         this.serachRequest();
-        })
+        this.props.onChangeBookShelfCategory(e,book);
     }
-
+    // get book shelf name from main page book list
+    getBookShelfName = (book)=>{
+        let bookObj =this.props.books.filter(a=> a.id === book.id)[0];
+        if(bookObj && bookObj.shelf){
+            return bookObj.shelf
+        }
+        return 'none'
+    }
     render() {
-        const { query, books } = this.state
+        const { query, results } = this.state
         const showingResults = query === "" ? false : true
         return (
             <div className="search-books">
@@ -64,15 +76,16 @@ class SearchBooks extends Component {
                             <span>Type to start search</span>
                         </div>
                     )}
-                    {(books.length === 0 && showingResults) && (
+                    {(results.length === 0 && showingResults) && (
                         <div className='showing-contacts'>
                             <span>No books match search criteria </span>
                         </div>
                     )}
                     <ol className="books-grid">
-                        {(showingResults && books.length > 0) && (books.map((book, index) => (
+                        {(showingResults && results.length > 0) && (results.map((book, index) => (
                             <BookUnit key={index}
                                 book={book}
+                                shelf={this.getBookShelfName(book)}
                                 onChangeBookShelf={this.changeBookShelf} />
                         )))}
                     </ol>
