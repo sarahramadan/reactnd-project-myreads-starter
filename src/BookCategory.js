@@ -8,12 +8,23 @@ class BookCategory extends Component {
         books: []
     }
     componentDidMount() {
+        this.getAll();
+    }
+    getAll = ()=>{
         BooksAPI.getAll()
-            .then((res) => {
-                this.setState(() => ({
-                    books: res
-                }))
-            })
+        .then((res) => {
+            this.setState(() => ({
+                books: res
+            }))
+        })
+    }
+    changeBookShelf = (e,book) =>{
+        console.log('changeBookShelf e', e.target.value)
+        console.log('changeBookShelf book', book)
+        BooksAPI.update(book,e.target.value).then(res=>{
+            this.getAll();
+            console.log('changeBookShelf res', res)
+        })
     }
     render() {
         let currentBooks = this.state.books.filter(a => a.shelf === 'currentlyReading');
@@ -40,7 +51,9 @@ class BookCategory extends Component {
                                 )}
                                 <ol className="books-grid">
                                     {currentBooks.map((book, index) => (
-                                        <BookUnit key={index} book={book} />
+                                        <BookUnit key={index} 
+                                        book={book}
+                                        onChangeBookShelf={this.changeBookShelf} />
                                     ))}
                                 </ol>
                             </div>
@@ -55,7 +68,10 @@ class BookCategory extends Component {
                                 )}
                                 <ol className="books-grid">
                                     {wantToReadBooks.map((book, index) => (
-                                        <BookUnit key={index} book={book} />
+                                        <BookUnit key={index} 
+                                        book={book}
+                                        onChangeBookShelf={this.changeBookShelf}
+                                         />
                                     ))}
                                 </ol>
                             </div>
@@ -70,7 +86,10 @@ class BookCategory extends Component {
                                 )}
                                 <ol className="books-grid">
                                     {read.map((book, index) => (
-                                        <BookUnit key={index} book={book} />
+                                         <BookUnit key={index} 
+                                         book={book}
+                                         onChangeBookShelf={this.changeBookShelf}
+                                          />
                                     ))}
                                 </ol>
                             </div>
