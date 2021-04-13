@@ -1,9 +1,12 @@
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class BookUnit extends Component{
 
-
+    static propTypes = {
+        book: PropTypes.object
+      }
     render() {
         const { book} = this.props
         return (
