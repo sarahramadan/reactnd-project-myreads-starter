@@ -1,6 +1,6 @@
 # MyReads Project
 
-This is the second assessment project for Udacity's React Fundamentals course. That you have main page that didvided to thress section and you can move book from section to section.Also have search page by inter filter name then books result display in page. 
+This is the second assessment project for Udacity's React Fundamentals course. That you have main page that didvided to three section and you can move book from section to section.Also have search page by enter filter name then books result display in page. 
 
 ## TL;DR
 
