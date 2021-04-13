@@ -14,13 +14,16 @@ class BookUnit extends Component{
             <li key={book.id}>
                 <div className="book">
                     <div className="book-top">
-                        <div className="book-cover" 
-                             style={{ 
-                                width: 128, 
-                                height: 193, 
-                                backgroundImage: `url(${book.imageLinks.smallThumbnail})`}}>
+                        {(book.imageLinks && book.imageLinks.smallThumbnail) && (
+                            <div className="book-cover"
+                                style={{
+                                    width: 128,
+                                    height: 193,
+                                    backgroundImage: `url(${book.imageLinks.smallThumbnail})`
+                                }}>
 
-                        </div>
+                            </div>
+                        )}
                         <div className="book-shelf-changer">
                             <select value={book.shelf} onChange={(e) => onChangeBookShelf(e,book)}>
                                 <option  value="move" disabled>Move to...</option>
@@ -32,7 +35,7 @@ class BookUnit extends Component{
                         </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors.length > 0 && (
+                    <div className="book-authors">{(book.authors && book.authors.length > 0) && (
                         book.authors.join('\n')
                     )}</div>
                 </div>

@@ -19,21 +19,14 @@ class BookCategory extends Component {
         })
     }
     changeBookShelf = (e,book) =>{
-        console.log('changeBookShelf e', e.target.value)
-        console.log('changeBookShelf book', book)
         BooksAPI.update(book,e.target.value).then(res=>{
             this.getAll();
-            console.log('changeBookShelf res', res)
         })
     }
     render() {
         let currentBooks = this.state.books.filter(a => a.shelf === 'currentlyReading');
         let wantToReadBooks = this.state.books.filter(a => a.shelf === 'wantToRead');
         let read = this.state.books.filter(a => a.shelf === 'read');
-        console.log('books', this.state.books)
-        console.log('currentBooks', currentBooks)
-        console.log('wantToReadBooks', wantToReadBooks)
-        console.log('read', read)
         return (
             <div className="list-books">
                 <div className="list-books-title">
